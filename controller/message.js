@@ -13,9 +13,12 @@ router.post(
       const messageData = req.body;
 
       if (req.body.images) {
-        const myCloud = await cloudinary.v2.uploader.upload(req.body.images, {
-          folder: "messages",
-        });
+        const myCloud = await cloudinary.v2.uploader.upload_large(
+          req.body.images,
+          {
+            folder: "messages",
+          }
+        );
         messageData.images = {
           public_id: myCloud.public_id,
           url: myCloud.url,
