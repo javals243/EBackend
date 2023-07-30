@@ -7,7 +7,7 @@ const cors = require("cors");
 
 app.use(
   cors({
-    origin: ["http://www.atelier.mdundiko.xyz"],
+    origin: ["https://uzisha-shop.vercel.app"],
     credentials: true,
   })
 );
