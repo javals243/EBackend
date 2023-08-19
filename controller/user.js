@@ -180,7 +180,6 @@ router.get(
     }
   })
 );
-
 // update user info
 router.put(
   "/update-user-info",
@@ -378,12 +377,43 @@ router.get(
   isAdmin("Admin"),
   catchAsyncErrors(async (req, res, next) => {
     try {
-      const users = await User.find().sort({
-        createdAt: -1,
-      });
+      const users = await User.find()
+        .sort({
+          createdAt: -1,
+        })
+        .select("+password");
       res.status(201).json({
         success: true,
         users,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
+// Update users --- admin
+router.put(
+  "/update-user-password/:id",
+  isAuthenticated,
+  isAdmin("Admin"),
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const user = await User.findById(req.params.id).select("+password");
+
+      if (!user) {
+        return next(
+          new ErrorHandler("User is not available with this id", 400)
+        );
+      }
+
+      user.password = req.body.newPassword;
+
+      await user.save();
+
+      res.status(200).json({
+        success: true,
+        message: "Password updated successfully!",
       });
     } catch (error) {
       return next(new ErrorHandler(error.message, 500));

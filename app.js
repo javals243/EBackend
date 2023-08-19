@@ -7,7 +7,8 @@ const cors = require("cors");
 
 app.use(
   cors({
-    origin: ["https://uzisha-shop.vercel.app"],
+    // origin: ["https://uzisha-shop.vercel.app"],
+    origin: ["http://localhost:3000"],
     credentials: true,
   })
 );

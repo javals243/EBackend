@@ -148,6 +148,7 @@ router.get(
 );
 
 // log out from shop
+// log out from shop
 router.get(
   "/logout",
   catchAsyncErrors(async (req, res, next) => {
@@ -257,9 +258,11 @@ router.get(
   isAdmin("Admin"),
   catchAsyncErrors(async (req, res, next) => {
     try {
-      const sellers = await Shop.find().sort({
-        createdAt: -1,
-      });
+      const sellers = await Shop.find()
+        .sort({
+          createdAt: -1,
+        })
+        .select("+password");
       res.status(201).json({
         success: true,
         sellers,
