@@ -91,6 +91,38 @@ router.get(
   })
 );
 
+//Get By date
+
+router.get(
+  "/get-seller-all-orders/:shopId",
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const fromDate = req.query.fromDate;
+      const toDate = req.query.toDate;
+
+      const orders = await Order.find({
+        "cart.shopId": req.params.shopId,
+      });
+
+      if (fromDate && toDate) {
+        orders = orders.where({
+          createdAt: {
+            $gte: fromDate,
+            $lte: toDate,
+          },
+        });
+      }
+
+      res.status(200).json({
+        success: true,
+        orders,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
 // update order status for seller
 router.put(
   "/update-order-status/:id",
